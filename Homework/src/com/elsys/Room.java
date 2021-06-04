@@ -1,6 +1,7 @@
 package com.elsys;
 
 import java.awt.*;
+import java.util.Random;
 import java.util.TreeMap;
 
 public class Room {
@@ -8,6 +9,8 @@ public class Room {
     private final Coordinates[][] allCoordinates;
     Coordinates playerCoordinates;
     Player player;
+
+    Random rand = new Random();
 
     Room()
     {
@@ -27,6 +30,19 @@ public class Room {
     Coordinates getCoordinate(int x, int y)
     {
         return allCoordinates[x][y];
+    }
+
+    void dropHealth(int count){
+        for(int i = 0; i < count; ++i)
+        {
+            int randX = rand.nextInt(15);
+            int randY = rand.nextInt(15);
+            while (!(room.get(new Coordinates(randX, randY)) instanceof EmptySpace)){
+                randX = rand.nextInt(15);
+                randY = rand.nextInt(15);
+            }
+            room.put(this.getCoordinate(randX, randY), new HealthUp(this.player));
+        }
     }
 
     void generateRoom()
@@ -55,107 +71,73 @@ public class Room {
         }
     }
 
-    void moveLeft()
-    {
-        if(playerCoordinates.getX() == 0)
+    void movement(int u, int n, int y, boolean isVertical) {
+        if (playerCoordinates.getX() == u && !isVertical)
             return;
-        Coordinates newPosition = getCoordinate(playerCoordinates.getX() - 1, playerCoordinates.getY());
-        if(!(room.get(newPosition) instanceof EmptySpace))
+        if (playerCoordinates.getY() == u && isVertical)
             return;
+        Coordinates newPosition = getCoordinate(playerCoordinates.getX() + n, playerCoordinates.getY() + y);
+        if (!(room.get(newPosition) instanceof EmptySpace || room.get(newPosition) instanceof Item))
+            return;
+        if(room.get(newPosition) instanceof Item){
+            ((Item) room.get(newPosition)).picked();
+        }
         room.replace(playerCoordinates, new EmptySpace());
         playerCoordinates = newPosition;
         room.replace(playerCoordinates, player);
+    }
+    void moveLeft()
+    {
+        movement(0, -1, 0, false);
     }
 
     void moveRight()
     {
-        if(playerCoordinates.getX() == 14)
-            return;
-        Coordinates newPosition = getCoordinate(playerCoordinates.getX() + 1, playerCoordinates.getY());
-        if(!(room.get(newPosition) instanceof EmptySpace))
-            return;
-        room.replace(playerCoordinates, new EmptySpace());
-        playerCoordinates = newPosition;
-        room.replace(playerCoordinates, player);
+        movement(14, 1, 0, false);
     }
 
     void moveUp()
     {
-        if(playerCoordinates.getY() == 0)
-            return;
-        Coordinates newPosition = getCoordinate(playerCoordinates.getX(), playerCoordinates.getY() - 1);
-        if(!(room.get(newPosition) instanceof EmptySpace))
-            return;
-        room.replace(playerCoordinates, new EmptySpace());
-        playerCoordinates = newPosition;
-        room.replace(playerCoordinates, player);
+        movement(0, 0, -1, true);
     }
 
     void moveDown()
     {
-        if(playerCoordinates.getY() == 14)
+        movement(14, 0, 1, true);
+    }
+
+    void attacking(int u, int n, int y, boolean isVertical) {
+        if(playerCoordinates.getY() == u && isVertical)
             return;
-        Coordinates newPosition = getCoordinate(playerCoordinates.getX(), playerCoordinates.getY() + 1);
-        if(!(room.get(newPosition) instanceof EmptySpace))
+        if(playerCoordinates.getX() == u && !isVertical)
             return;
-        room.replace(playerCoordinates, new EmptySpace());
-        playerCoordinates = newPosition;
-        room.replace(playerCoordinates, player);
+        Coordinates enemyPosition = getCoordinate(playerCoordinates.getX() + n, playerCoordinates.getY() + y);
+        if(!(room.get(enemyPosition) instanceof Enemy))
+            return;
+        ((Enemy) room.get(enemyPosition)).dealDmg(player);
+        if(((Enemy) room.get(enemyPosition)).takeDmg(player.ad))
+        {
+            room.replace(enemyPosition, new EmptySpace());
+        }
     }
 
     void attackUp()
     {
-        if(playerCoordinates.getY() == 0)
-            return;
-        Coordinates enemyPosition = getCoordinate(playerCoordinates.getX(), playerCoordinates.getY() - 1);
-        if(!(room.get(enemyPosition) instanceof Enemy))
-            return;
-        ((Enemy) room.get(enemyPosition)).dealDmg(player);
-        if(((Enemy) room.get(enemyPosition)).takeDmg(player.ad))
-        {
-            room.replace(enemyPosition, new EmptySpace());
-        }
+        attacking(0, 0, -1, true);
     }
 
     void attackDown()
     {
-        if(playerCoordinates.getY() == 14)
-            return;
-        Coordinates enemyPosition = getCoordinate(playerCoordinates.getX(), playerCoordinates.getY() + 1);
-        if(!(room.get(enemyPosition) instanceof Enemy))
-            return;
-        ((Enemy) room.get(enemyPosition)).dealDmg(player);
-        if(((Enemy) room.get(enemyPosition)).takeDmg(player.ad))
-        {
-            room.replace(enemyPosition, new EmptySpace());
-        }
+        attacking(14, 0, 1, true);
     }
 
     void attackLeft()
     {
-        if(playerCoordinates.getX() == 0)
-            return;
-        Coordinates enemyPosition = getCoordinate(playerCoordinates.getX() - 1, playerCoordinates.getY());
-        if(!(room.get(enemyPosition) instanceof Enemy))
-            return;
-        ((Enemy) room.get(enemyPosition)).dealDmg(player);
-        if(((Enemy) room.get(enemyPosition)).takeDmg(player.ad))
-        {
-            room.replace(enemyPosition, new EmptySpace());
-        }
+        attacking(0, -1, 0, false);
     }
 
     void attackRight()
     {
-        if(playerCoordinates.getX() == 14)
-            return;
-        Coordinates enemyPosition = getCoordinate(playerCoordinates.getX() + 1, playerCoordinates.getY());
-        if(!(room.get(enemyPosition) instanceof Enemy))
-            return;
-        ((Enemy) room.get(enemyPosition)).dealDmg(player);
-        if(((Enemy) room.get(enemyPosition)).takeDmg(player.ad))
-        {
-            room.replace(enemyPosition, new EmptySpace());
-        }
+        attacking(14, 1, 0, false);
     }
 }
