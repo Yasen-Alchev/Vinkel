@@ -6,9 +6,11 @@ public class Player implements GameObject {
     int health;
     int ad;
     int armor;
+    Main game;
 
-    Player()
+    Player(Main game)
     {
+        this.game = game;
         this.health = 100;
         this.ad = 10;
         this.armor = 0;
@@ -16,14 +18,13 @@ public class Player implements GameObject {
 
     void takeDmg(int damage)
     {
-        System.out.println("armor " + this.armor);
         if(this.armor >= damage)
             return;
         this.health -= damage - this.armor;
         if(this.health <= 0)
         {
             this.health = 0;
-            System.out.println("You died!");
+            game.stop();
         }
     }
 

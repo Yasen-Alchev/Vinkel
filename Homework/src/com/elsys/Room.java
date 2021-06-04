@@ -9,12 +9,11 @@ public class Room {
     private final Coordinates[][] allCoordinates;
     Coordinates playerCoordinates;
     Player player;
-
     Random rand = new Random();
 
-    Room()
+    Room(Main game)
     {
-        this.player = new Player();
+        this.player = new Player(game);
         this.room = new TreeMap<>();
         this.allCoordinates = new Coordinates[15][15];
         for(int i = 0; i < 15; i++)
@@ -53,6 +52,15 @@ public class Room {
         }
     }
 
+    void addObject(int bound, GameObject object){
+        for(int i = 0; i <= rand.nextInt(bound); i++) {
+            int rand_x_stones = rand.nextInt(14);
+            int rand_y_stones = rand.nextInt(14);
+            if (room.get(getCoordinate(rand_x_stones, rand_y_stones)) instanceof EmptySpace) {
+                room.replace(getCoordinate(rand_x_stones, rand_y_stones), object);
+            }
+        }
+    }
 
     void generateRoom()
     {
@@ -65,33 +73,9 @@ public class Room {
             }
         }
 
-        Random rand = new Random();
-
-        int br_rocks = rand.nextInt(5);
-        for(int i = 0;i <= br_rocks;i++) {
-            int rand_x_stones = rand.nextInt(14);
-            int rand_y_stones = rand.nextInt(14);
-            if (room.get(getCoordinate(rand_x_stones, rand_y_stones)) instanceof EmptySpace) {
-                room.replace(getCoordinate(rand_x_stones, rand_y_stones), new Rock());
-            }
-        }
-        int br_orcs = rand.nextInt(3);
-        for(int i = 0;i <= br_orcs;i++) {
-            int rand_x_enemies = rand.nextInt(14);
-            int rand_y_enemies = rand.nextInt(14);
-            if (room.get(getCoordinate(rand_x_enemies, rand_y_enemies)) instanceof EmptySpace) {
-                room.replace(getCoordinate(rand_x_enemies, rand_y_enemies), new Orc());
-            }
-        }
-        int br_warlocks = rand.nextInt(2);
-        for(int i = 0;i <= br_warlocks;i++) {
-            int rand_x_enemies = rand.nextInt(14);
-            int rand_y_enemies = rand.nextInt(14);
-            if (room.get(getCoordinate(rand_x_enemies, rand_y_enemies)) instanceof EmptySpace) {
-                room.replace(getCoordinate(rand_x_enemies, rand_y_enemies), new Warlock());
-            }
-        }
-
+        addObject(5, new Rock());
+        addObject(3, new Orc());
+        addObject(2, new Warlock());
         room.replace(playerCoordinates, player);
     }
 

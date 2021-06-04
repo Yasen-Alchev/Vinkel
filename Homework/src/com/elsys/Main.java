@@ -7,30 +7,40 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Main {
+	Random rand;
+	Room room;
+	Font myFont;
+	JFrame frame;
+	Canvas canvas;
+	Timer timer;
 
-    public static void main(String[] args) {
-		Random rand = new Random();
-	    Room room = new Room();
+	Main(){
+		rand = new Random();
+		room = new Room(this);
+		myFont = new Font ("TimesRoman", 1, 20);
 
-		Font myFont = new Font ("TimesRoman", 1, 20);
-
-	    JFrame frame = new JFrame("Homework Game");
-	    frame.addKeyListener(new KeyPress(room));
+		frame = new JFrame("Homework Game");
+		frame.addKeyListener(new KeyPress(room));
 		frame.setSize(800, 600);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 
-		Canvas canvas = new Canvas();
+		canvas = new Canvas();
 		canvas.setBounds(0, 0, frame.getWidth(), frame.getHeight());
 		canvas.init();
 		canvas.g.setFont(myFont);
-		frame.getContentPane().add(canvas);
-		Timer timer = new Timer();
 
+		frame.getContentPane().add(canvas);
+
+		timer = new Timer();
 		room.dropHealth(rand.nextInt(2) + 1);
 		room.dropArmor(rand.nextInt(2) + 1);
 
+		start();
+	}
+
+	void start(){
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
@@ -41,5 +51,21 @@ public class Main {
 
 			}
 		}, 0, 100/3);
+	}
+
+	void stop(){
+		String text = "You died";
+		canvas.g.setFont(new Font("TimesRoman", 1, 40));
+		canvas.g.setColor(Color.BLACK);
+		canvas.g.fillRect(0,0,800, 600);
+		canvas.g.setColor(Color.RED);
+		System.out.println(text.length());
+		canvas.g.drawString(text, 400 - text.length() * 11, 300 - 5);
+		canvas.repaint();
+		timer.cancel();
+	}
+
+    public static void main(String[] args) {
+		new Main();
     }
 }
