@@ -2,13 +2,16 @@ package com.elsys;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Main {
 
     public static void main(String[] args) {
+		Random rand = new Random();
 	    Room room = new Room();
+
 		Font myFont = new Font ("TimesRoman", 1, 20);
 
 	    JFrame frame = new JFrame("Homework Game");
@@ -24,6 +27,10 @@ public class Main {
 		canvas.g.setFont(myFont);
 		frame.getContentPane().add(canvas);
 		Timer timer = new Timer();
+
+		room.dropHealth(rand.nextInt(2) + 1);
+		room.dropArmor(rand.nextInt(2) + 1);
+
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {

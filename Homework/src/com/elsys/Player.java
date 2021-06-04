@@ -11,12 +11,15 @@ public class Player implements GameObject {
     {
         this.health = 100;
         this.ad = 10;
-        this.armor = 50;
+        this.armor = 0;
     }
 
     void takeDmg(int damage)
     {
-        this.health -= damage;
+        System.out.println("armor " + this.armor);
+        if(this.armor >= damage)
+            return;
+        this.health -= damage - this.armor;
         if(this.health <= 0)
         {
             this.health = 0;
