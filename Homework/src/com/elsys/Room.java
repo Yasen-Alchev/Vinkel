@@ -33,6 +33,14 @@ public class Room {
     }
 
     void dropHealth(int count){
+        drop(count, new HealthUp(this.player));
+    }
+    void dropArmor(int count){
+        drop(count, new ArmorUp(this.player));
+    }
+
+    void drop(int count, GameObject object)
+    {
         for(int i = 0; i < count; ++i)
         {
             int randX = rand.nextInt(15);
@@ -41,7 +49,7 @@ public class Room {
                 randX = rand.nextInt(15);
                 randY = rand.nextInt(15);
             }
-            room.put(this.getCoordinate(randX, randY), new HealthUp(this.player));
+            room.put(this.getCoordinate(randX, randY), object);
         }
     }
 

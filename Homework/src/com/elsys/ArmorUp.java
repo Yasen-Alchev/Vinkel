@@ -2,21 +2,21 @@ package com.elsys;
 
 import java.awt.*;
 
-public class HealthUp implements GameObject, Item{
-
+public class ArmorUp implements GameObject, Item{
     Player player;
-    public HealthUp(Player player) {
+
+    public ArmorUp(Player player) {
         this.player = player;
     }
 
     @Override
     public void draw(Graphics2D g, Coordinates coordinates) {
-        g.setColor(Color.pink);
+        g.setColor(Color.orange);
         g.fillRect(coordinates.getX()*30, coordinates.getY()*30, 30, 30);
     }
 
     @Override
     public void picked() {
-        player.addHealth(20);
+        player.addArmor(5);
     }
 }

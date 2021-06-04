@@ -29,6 +29,7 @@ public class Main {
 		Timer timer = new Timer();
 
 		room.dropHealth(rand.nextInt(2) + 1);
+		room.dropArmor(rand.nextInt(2) + 1);
 
 		timer.schedule(new TimerTask() {
 			@Override
