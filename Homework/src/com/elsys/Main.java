@@ -7,6 +7,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Main {
+	public final static int BoardX = 800;
+	public final static int BoardY = 800;
+
 	Random rand;
 	Room room;
 	Font myFont;
@@ -17,11 +20,11 @@ public class Main {
 	Main(){
 		rand = new Random();
 		room = new Room(this);
-		myFont = new Font ("TimesRoman", Font.BOLD, 20);
+		myFont = new Font ("TimesRoman", 1, 20);
 
 		frame = new JFrame("Homework Game");
 		frame.addKeyListener(new KeyPress(room));
-		frame.setSize(800, 600);
+		frame.setSize(BoardX, BoardY);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -34,7 +37,6 @@ public class Main {
 		frame.getContentPane().add(canvas);
 
 		timer = new Timer();
-
 		start();
 	}
 
@@ -42,20 +44,18 @@ public class Main {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-
-				canvas.g.setBackground(Color.WHITE);
-				room.renderRoom(canvas.g);
-				canvas.repaint();
-
+					canvas.g.setBackground(Color.WHITE);
+					room.renderRoom(canvas.g);
+					canvas.repaint();
 			}
 		}, 0, 100/3);
 	}
 
 	void stop(boolean gameEnding){
 		String text;
-		canvas.g.setFont(new Font("TimesRoman", Font.BOLD, 40));
+		canvas.g.setFont(new Font("TimesRoman", 1, 60));
 		canvas.g.setColor(Color.BLACK);
-		canvas.g.fillRect(0,0,800, 600);
+		canvas.g.fillRect(0,0,BoardX, BoardY);
 		if(gameEnding)
 		{
 			text = "You win";
@@ -66,9 +66,22 @@ public class Main {
 			text = "You died";
 			canvas.g.setColor(Color.red);
 		}
-		canvas.g.drawString(text, 400 - text.length() * 11, 300 - 5);
+		canvas.g.drawString(text, BoardX/2 - text.length() * 15, BoardY/2 - 15);
 		canvas.repaint();
 		timer.cancel();
+	}
+
+	void renderShopScreen(){
+		timer.cancel();
+		canvas.g.setColor(Color.BLACK);
+		canvas.g.fillRect(0,0,BoardX, BoardY);
+		canvas.repaint();
+	}
+
+	void exitShop(){
+		this.timer = new Timer();
+		canvas.g.clearRect(0, 0, BoardX, BoardY);
+		start();
 	}
 
     public static void main(String[] args) {

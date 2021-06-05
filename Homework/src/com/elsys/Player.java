@@ -6,7 +6,9 @@ public class Player implements GameObject {
     int health;
     int ad;
     int armor;
+    int gold;
     Main game;
+    Coordinates playerCoordinates;
 
     Player(Main game)
     {
@@ -14,6 +16,11 @@ public class Player implements GameObject {
         this.health = 100;
         this.ad = 10;
         this.armor = 0;
+        this.gold = 0;
+    }
+
+    void addGold(int gold){
+        this.gold += gold;
     }
 
     void takeDmg(int damage)
@@ -63,14 +70,21 @@ public class Player implements GameObject {
         return "Current damage: " + this.ad;
     }
 
+    public String getCurrentGold()
+    {
+        return "Current gold: " + this.gold;
+    }
+
     @Override
     public void draw(Graphics2D g, Coordinates coordinates) {
-        g.clearRect(5 * 29, 16 * 30, 100 ,100); // we do this so the hp can update
+        this.playerCoordinates = coordinates;
+        g.clearRect(0, 460, 800 ,340); // we do this so the hp can update
         g.setColor(Color.RED);
         g.fillRect(coordinates.getX() * 30, coordinates.getY() * 30, 30 ,30);
         g.setColor(Color.BLACK);
         g.drawString(getCurrentHealth(), 0, 17 * 30);
         g.drawString(getCurrentArmor(), 0, 18 * 30);
         g.drawString(getCurrentDamage(), 0, 19 * 30);
+        g.drawString(getCurrentGold(), 0, 20 * 30);
     }
 }

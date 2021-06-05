@@ -3,10 +3,17 @@ package com.elsys;
 import java.awt.*;
 
 public class Warlock extends Enemy{
+
+    public final int goldDrop = 2;
+
     Warlock()
     {
         super(20, 25);
+    }
 
+    @Override
+    int dropGold() {
+        return goldDrop;
     }
 
     @Override

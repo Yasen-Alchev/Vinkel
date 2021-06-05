@@ -3,10 +3,19 @@ package com.elsys;
 import java.awt.*;
 
 public class Orc extends Enemy{
+
+    public final int goldDrop = 1;
+
     Orc()
     {
         super(15, 20);
     }
+
+    @Override
+    int dropGold() {
+        return goldDrop;
+    }
+
     @Override
     public boolean takeDmg(int damage) {
         this.hp -= damage;

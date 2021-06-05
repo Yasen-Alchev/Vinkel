@@ -1,6 +1,7 @@
 package com.elsys;
 
 public abstract class Enemy implements GameObject {
+
     int hp;
     int damage;
 
@@ -10,6 +11,7 @@ public abstract class Enemy implements GameObject {
         this.damage = damage;
     }
 
+    abstract int dropGold();
     abstract boolean takeDmg(int damage);
 
     abstract void dealDmg(Player player);

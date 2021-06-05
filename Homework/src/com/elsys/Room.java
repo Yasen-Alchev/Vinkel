@@ -8,14 +8,17 @@ public class Room {
     Main game;
     TreeMap<Coordinates, GameObject> room;
     private final Coordinates[][] allCoordinates;
+    public static boolean isShop = false;
     Coordinates playerCoordinates;
     Player player;
     Quest quest;
     int totalEnemies;
     Random rand = new Random();
+    ShopBlock shopBlock;
 
     Room(Main game)
     {
+        this.shopBlock = null;
         this.player = new Player(game);
         this.room = new TreeMap<>();
         this.quest = new WarlockQuest();
@@ -36,10 +39,10 @@ public class Room {
         return allCoordinates[x][y];
     }
 
-    void dropHealth(int count){
+    void dropHealthBlocks(int count){
         drop(count, new HealthUp(this.player));
     }
-    void dropArmor(int count){
+    void dropArmorBlocks(int count){
         drop(count, new ArmorUp(this.player));
     }
 
@@ -78,14 +81,12 @@ public class Room {
             }
         }
 
-        dropHealth(rand.nextInt(2) + 1);
-        dropArmor(rand.nextInt(2) + 1);
-        for(int i = 0; i <= rand.nextInt(5); ++i)
-            addObject(new Rock());
-        for(int i = 0; i <= rand.nextInt(2); ++i)
-            addObject(new Orc());
-        for(int i = 0; i <= rand.nextInt(1); ++i)
-            addObject(new Warlock());
+        if(rand.nextInt(10) == 9){
+            shopRoom();
+        }
+        else{
+            normalRoom();
+        }
         playerCoordinates = getCoordinate(0,7);
         room.replace(playerCoordinates, player);
     }
@@ -100,6 +101,69 @@ public class Room {
             }
         }
         quest.draw(g);
+    }
+
+    void moveLeft()
+    {
+        movement(0, -1, 0, false);
+    }
+
+    void moveRight()
+    {
+        movement(14, 1, 0, false);
+    }
+
+    void moveUp()
+    {
+        movement(0, 0, -1, true);
+    }
+
+    void moveDown()
+    {
+        movement(14, 0, 1, true);
+    }
+
+    void attackUp()
+    {
+        attacking(0, 0, -1, true);
+    }
+
+    void attackDown()
+    {
+        attacking(14, 0, 1, true);
+    }
+
+    void attackLeft()
+    {
+        attacking(0, -1, 0, false);
+    }
+
+    void attackRight()
+    {
+        attacking(14, 1, 0, false);
+    }
+
+    void attacking(int border, int x, int y, boolean isVertical) {
+        if(playerCoordinates.getY() == border && isVertical)
+            return;
+        if(playerCoordinates.getX() == border && !isVertical)
+            return;
+        Coordinates enemyPosition = getCoordinate(playerCoordinates.getX() + x, playerCoordinates.getY() + y);
+        if(!(room.get(enemyPosition) instanceof Enemy))
+            return;
+        ((Enemy) room.get(enemyPosition)).dealDmg(player);
+        if(((Enemy) room.get(enemyPosition)).takeDmg(player.ad))
+        {
+            if(quest.makeProgress((Enemy) room.get(enemyPosition)))
+                game.stop(true);
+            player.addGold(((Enemy) room.get(enemyPosition)).dropGold());
+            room.replace(enemyPosition, new EmptySpace());
+            totalEnemies--;
+            if(totalEnemies == 0)
+            {
+                room.replace(getCoordinate(14, 7), new Door());
+            }
+        }
     }
 
     void movement(int border, int x, int y, boolean isVertical) {
@@ -122,66 +186,36 @@ public class Room {
         playerCoordinates = newPosition;
         room.replace(playerCoordinates, player);
     }
-    void moveLeft()
-    {
-        movement(0, -1, 0, false);
+    void normalRoom(){
+        isShop = false;
+        dropHealthBlocks(rand.nextInt(2) + 1);
+        dropArmorBlocks(rand.nextInt(2) + 1);
+        for(int i = 0; i <= rand.nextInt(5); ++i)
+            addObject(new Rock());
+        for(int i = 0; i <= rand.nextInt(2); ++i)
+            addObject(new Orc());
+        for(int i = 0; i <= rand.nextInt(1); ++i)
+            addObject(new Warlock());
     }
 
-    void moveRight()
-    {
-        movement(14, 1, 0, false);
+    void shopRoom(){
+        isShop = true;
+        shopBlock = new ShopBlock();
+        room.put(this.getCoordinate(7, 7), shopBlock);
+        room.put(this.getCoordinate(14, 7), new Door());
     }
 
-    void moveUp()
-    {
-        movement(0, 0, -1, true);
+    void renderShop(int direction){
+        game.renderShopScreen();
+        this.shopBlock.drawMenu(game.canvas.g, direction);
     }
 
-    void moveDown()
-    {
-        movement(14, 0, 1, true);
+    void exitShop(){
+        game.exitShop();
     }
 
-    void attacking(int border, int x, int y, boolean isVertical) {
-        if(playerCoordinates.getY() == border && isVertical)
-            return;
-        if(playerCoordinates.getX() == border && !isVertical)
-            return;
-        Coordinates enemyPosition = getCoordinate(playerCoordinates.getX() + x, playerCoordinates.getY() + y);
-        if(!(room.get(enemyPosition) instanceof Enemy))
-            return;
-        ((Enemy) room.get(enemyPosition)).dealDmg(player);
-        if(((Enemy) room.get(enemyPosition)).takeDmg(player.ad))
-        {
-
-            if(quest.makeProgress((Enemy) room.get(enemyPosition)))
-                game.stop(true);
-            room.replace(enemyPosition, new EmptySpace());
-            totalEnemies--;
-            if(totalEnemies == 0)
-            {
-                room.replace(getCoordinate(14, 7), new Door());
-            }
-        }
+    void buySelectedItem(){
+        shopBlock.buyItem(player);
     }
 
-    void attackUp()
-    {
-        attacking(0, 0, -1, true);
-    }
-
-    void attackDown()
-    {
-        attacking(14, 0, 1, true);
-    }
-
-    void attackLeft()
-    {
-        attacking(0, -1, 0, false);
-    }
-
-    void attackRight()
-    {
-        attacking(14, 1, 0, false);
-    }
 }
