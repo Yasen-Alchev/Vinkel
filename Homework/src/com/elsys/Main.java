@@ -51,13 +51,21 @@ public class Main {
 		}, 0, 100/3);
 	}
 
-	void stop(){
-		String text = "You died";
+	void stop(boolean gameEnding){
+		String text;
 		canvas.g.setFont(new Font("TimesRoman", Font.BOLD, 40));
 		canvas.g.setColor(Color.BLACK);
 		canvas.g.fillRect(0,0,800, 600);
-		canvas.g.setColor(Color.RED);
-		System.out.println(text.length());
+		if(gameEnding)
+		{
+			text = "You win";
+			canvas.g.setColor(Color.blue);
+		}
+		else
+		{
+			text = "You died";
+			canvas.g.setColor(Color.red);
+		}
 		canvas.g.drawString(text, 400 - text.length() * 11, 300 - 5);
 		canvas.repaint();
 		timer.cancel();

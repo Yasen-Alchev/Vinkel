@@ -5,16 +5,22 @@ import java.util.Random;
 import java.util.TreeMap;
 
 public class Room {
+    Main game;
     TreeMap<Coordinates, GameObject> room;
     private final Coordinates[][] allCoordinates;
     Coordinates playerCoordinates;
     Player player;
+    Quest quest;
+    int totalEnemies;
     Random rand = new Random();
 
     Room(Main game)
     {
         this.player = new Player(game);
         this.room = new TreeMap<>();
+        this.quest = new WarlockQuest();
+        this.game = game;
+        this.totalEnemies = 0;
         this.allCoordinates = new Coordinates[15][15];
         for(int i = 0; i < 15; i++)
         {
@@ -23,7 +29,6 @@ public class Room {
                 allCoordinates[i][j] = new Coordinates(i, j);
             }
         }
-        playerCoordinates = new Coordinates(0, 7);
     }
 
     Coordinates getCoordinate(int x, int y)
@@ -57,6 +62,8 @@ public class Room {
         int randY = rand.nextInt(14);
         if (room.get(getCoordinate(randX, randY)) instanceof EmptySpace) {
             room.replace(getCoordinate(randX, randY), object);
+            if(object instanceof Enemy)
+                totalEnemies++;
         }
     }
 
@@ -75,10 +82,11 @@ public class Room {
         dropArmor(rand.nextInt(2) + 1);
         for(int i = 0; i <= rand.nextInt(5); ++i)
             addObject(new Rock());
-        for(int i = 0; i <= rand.nextInt(3); ++i)
-            addObject(new Orc());
         for(int i = 0; i <= rand.nextInt(2); ++i)
+            addObject(new Orc());
+        for(int i = 0; i <= rand.nextInt(1); ++i)
             addObject(new Warlock());
+        playerCoordinates = getCoordinate(0,7);
         room.replace(playerCoordinates, player);
     }
 
@@ -91,6 +99,7 @@ public class Room {
                 room.get(this.getCoordinate(i,j)).draw(g, this.getCoordinate(i, j));
             }
         }
+        quest.draw(g);
     }
 
     void movement(int border, int x, int y, boolean isVertical) {
@@ -101,6 +110,11 @@ public class Room {
         Coordinates newPosition = getCoordinate(playerCoordinates.getX() + x, playerCoordinates.getY() + y);
         if (!(room.get(newPosition) instanceof Passable))
             return;
+        if(room.get(newPosition) instanceof Door)
+        {
+            this.generateRoom();
+            return;
+        }
         if(room.get(newPosition) instanceof Item){
             ((Item) room.get(newPosition)).picked();
         }
@@ -139,7 +153,15 @@ public class Room {
         ((Enemy) room.get(enemyPosition)).dealDmg(player);
         if(((Enemy) room.get(enemyPosition)).takeDmg(player.ad))
         {
+
+            if(quest.makeProgress((Enemy) room.get(enemyPosition)))
+                game.stop(true);
             room.replace(enemyPosition, new EmptySpace());
+            totalEnemies--;
+            if(totalEnemies == 0)
+            {
+                room.replace(getCoordinate(14, 7), new Door());
+            }
         }
     }
 

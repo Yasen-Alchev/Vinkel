@@ -24,7 +24,7 @@ public class Player implements GameObject {
         if(this.health <= 0)
         {
             this.health = 0;
-            game.stop();
+            game.stop(false);
         }
     }
 
