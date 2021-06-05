@@ -1,7 +1,16 @@
 package com.elsys;
 
-public interface Enemy extends GameObject {
-    boolean takeDmg(int damage);
+public abstract class Enemy implements GameObject {
+    int hp;
+    int damage;
 
-    void dealDmg(Player player);
+    Enemy(int hp, int damage)
+    {
+        this.hp = hp;
+        this.damage = damage;
+    }
+
+    abstract boolean takeDmg(int damage);
+
+    abstract void dealDmg(Player player);
 }

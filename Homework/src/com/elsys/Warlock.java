@@ -2,12 +2,10 @@ package com.elsys;
 
 import java.awt.*;
 
-public class Warlock implements Enemy{
-    int hp;
-    int ap;
-    Warlock(){
-        this.hp = 20;
-        this.ap = 25;
+public class Warlock extends Enemy{
+    Warlock()
+    {
+        super(20, 25);
 
     }
 
@@ -20,10 +18,7 @@ public class Warlock implements Enemy{
     }
 
     public void dealDmg(Player player) {
-        //for(int i = 0;i<3;i++){
-            //int poison = this.ap / 2;
-            player.takeDmg(this.ap);
-        //}
+        player.takeDmg(this.damage);
     }
 
     @Override

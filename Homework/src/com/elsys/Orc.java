@@ -2,14 +2,10 @@ package com.elsys;
 
 import java.awt.*;
 
-public class Orc implements Enemy{
-    int hp;
-    int ad;
-
+public class Orc extends Enemy{
     Orc()
     {
-        this.hp = 15;
-        this.ad = 20;
+        super(15, 20);
     }
     @Override
     public boolean takeDmg(int damage) {
@@ -21,7 +17,7 @@ public class Orc implements Enemy{
 
     @Override
     public void dealDmg(Player player) {
-        player.takeDmg(this.ad);
+        player.takeDmg(this.damage);
     }
 
 

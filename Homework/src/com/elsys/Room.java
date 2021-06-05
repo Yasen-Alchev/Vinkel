@@ -52,13 +52,11 @@ public class Room {
         }
     }
 
-    void addObject(int bound, GameObject object){
-        for(int i = 0; i <= rand.nextInt(bound); i++) {
-            int rand_x_stones = rand.nextInt(14);
-            int rand_y_stones = rand.nextInt(14);
-            if (room.get(getCoordinate(rand_x_stones, rand_y_stones)) instanceof EmptySpace) {
-                room.replace(getCoordinate(rand_x_stones, rand_y_stones), object);
-            }
+    void addObject(GameObject object){
+        int randX = rand.nextInt(14);
+        int randY = rand.nextInt(14);
+        if (room.get(getCoordinate(randX, randY)) instanceof EmptySpace) {
+            room.replace(getCoordinate(randX, randY), object);
         }
     }
 
@@ -73,9 +71,14 @@ public class Room {
             }
         }
 
-        addObject(5, new Rock());
-        addObject(3, new Orc());
-        addObject(2, new Warlock());
+        dropHealth(rand.nextInt(2) + 1);
+        dropArmor(rand.nextInt(2) + 1);
+        for(int i = 0; i <= rand.nextInt(5); ++i)
+            addObject(new Rock());
+        for(int i = 0; i <= rand.nextInt(3); ++i)
+            addObject(new Orc());
+        for(int i = 0; i <= rand.nextInt(2); ++i)
+            addObject(new Warlock());
         room.replace(playerCoordinates, player);
     }
 
@@ -90,13 +93,13 @@ public class Room {
         }
     }
 
-    void movement(int u, int n, int y, boolean isVertical) {
-        if (playerCoordinates.getX() == u && !isVertical)
+    void movement(int border, int x, int y, boolean isVertical) {
+        if (playerCoordinates.getX() == border && !isVertical)
             return;
-        if (playerCoordinates.getY() == u && isVertical)
+        if (playerCoordinates.getY() == border && isVertical)
             return;
-        Coordinates newPosition = getCoordinate(playerCoordinates.getX() + n, playerCoordinates.getY() + y);
-        if (!(room.get(newPosition) instanceof EmptySpace || room.get(newPosition) instanceof Item))
+        Coordinates newPosition = getCoordinate(playerCoordinates.getX() + x, playerCoordinates.getY() + y);
+        if (!(room.get(newPosition) instanceof Passable))
             return;
         if(room.get(newPosition) instanceof Item){
             ((Item) room.get(newPosition)).picked();
@@ -125,12 +128,12 @@ public class Room {
         movement(14, 0, 1, true);
     }
 
-    void attacking(int u, int n, int y, boolean isVertical) {
-        if(playerCoordinates.getY() == u && isVertical)
+    void attacking(int border, int x, int y, boolean isVertical) {
+        if(playerCoordinates.getY() == border && isVertical)
             return;
-        if(playerCoordinates.getX() == u && !isVertical)
+        if(playerCoordinates.getX() == border && !isVertical)
             return;
-        Coordinates enemyPosition = getCoordinate(playerCoordinates.getX() + n, playerCoordinates.getY() + y);
+        Coordinates enemyPosition = getCoordinate(playerCoordinates.getX() + x, playerCoordinates.getY() + y);
         if(!(room.get(enemyPosition) instanceof Enemy))
             return;
         ((Enemy) room.get(enemyPosition)).dealDmg(player);

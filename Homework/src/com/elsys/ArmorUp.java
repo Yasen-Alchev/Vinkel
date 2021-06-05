@@ -2,7 +2,7 @@ package com.elsys;
 
 import java.awt.*;
 
-public class ArmorUp implements GameObject, Item{
+public class ArmorUp implements GameObject, Item, Passable{
     Player player;
 
     public ArmorUp(Player player) {

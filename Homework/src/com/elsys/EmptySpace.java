@@ -2,7 +2,7 @@ package com.elsys;
 
 import java.awt.*;
 
-public class EmptySpace implements GameObject
+public class EmptySpace implements GameObject, Passable
 {
     @Override
     public void draw(Graphics2D g, Coordinates coordinates) {

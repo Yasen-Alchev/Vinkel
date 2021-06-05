@@ -47,18 +47,30 @@ public class Player implements GameObject {
         this.ad += ad;
     }
 
-    @Override
-    public String toString()
+
+    public String getCurrentHealth()
     {
         return "Current health: " + this.health;
     }
 
+    public String getCurrentArmor()
+    {
+        return "Current armor: " + this.armor;
+    }
+
+    public String getCurrentDamage()
+    {
+        return "Current damage: " + this.ad;
+    }
+
     @Override
     public void draw(Graphics2D g, Coordinates coordinates) {
-        g.clearRect(5 * 30, 16 * 30, 32 ,30); // we do this so the hp can update
+        g.clearRect(5 * 29, 16 * 30, 100 ,100); // we do this so the hp can update
         g.setColor(Color.RED);
         g.fillRect(coordinates.getX() * 30, coordinates.getY() * 30, 30 ,30);
         g.setColor(Color.BLACK);
-        g.drawString(toString(), 0, 17 * 30);
+        g.drawString(getCurrentHealth(), 0, 17 * 30);
+        g.drawString(getCurrentArmor(), 0, 18 * 30);
+        g.drawString(getCurrentDamage(), 0, 19 * 30);
     }
 }

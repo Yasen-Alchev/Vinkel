@@ -2,7 +2,7 @@ package com.elsys;
 
 import java.awt.*;
 
-public class HealthUp implements GameObject, Item{
+public class HealthUp implements GameObject, Item, Passable{
 
     Player player;
     public HealthUp(Player player) {

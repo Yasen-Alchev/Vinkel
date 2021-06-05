@@ -17,7 +17,7 @@ public class Main {
 	Main(){
 		rand = new Random();
 		room = new Room(this);
-		myFont = new Font ("TimesRoman", 1, 20);
+		myFont = new Font ("TimesRoman", Font.BOLD, 20);
 
 		frame = new JFrame("Homework Game");
 		frame.addKeyListener(new KeyPress(room));
@@ -34,8 +34,6 @@ public class Main {
 		frame.getContentPane().add(canvas);
 
 		timer = new Timer();
-		room.dropHealth(rand.nextInt(2) + 1);
-		room.dropArmor(rand.nextInt(2) + 1);
 
 		start();
 	}
@@ -55,7 +53,7 @@ public class Main {
 
 	void stop(){
 		String text = "You died";
-		canvas.g.setFont(new Font("TimesRoman", 1, 40));
+		canvas.g.setFont(new Font("TimesRoman", Font.BOLD, 40));
 		canvas.g.setColor(Color.BLACK);
 		canvas.g.fillRect(0,0,800, 600);
 		canvas.g.setColor(Color.RED);
