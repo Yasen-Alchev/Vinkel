@@ -16,6 +16,7 @@ public class Room {
     int totalRooms;
     Random rand = new Random();
     ShopBlock shopBlock;
+    boolean isOnSpikes;
 
     Room(Main game)
     {
@@ -27,6 +28,7 @@ public class Room {
         this.totalEnemies = 0;
         this.totalRooms = 0;
         this.allCoordinates = new Coordinates[15][15];
+        this.isOnSpikes = false;
         for(int i = 0; i < 15; i++)
         {
             for(int j = 0; j < 15; j++)
@@ -186,6 +188,21 @@ public class Room {
         if(room.get(newPosition) instanceof Item){
             ((Item) room.get(newPosition)).picked();
         }
+
+        if(isOnSpikes){
+            room.replace(playerCoordinates, new Spikes());
+            isOnSpikes = false;
+        }else{
+
+            room.replace(playerCoordinates, new EmptySpace());
+        }
+        if(room.get(newPosition) instanceof Spikes){
+            ((Spikes) room.get(newPosition)).dealDmg(player);
+            isOnSpikes = true;
+        }
+        playerCoordinates = newPosition;
+        room.replace(playerCoordinates, player);
+
         room.replace(playerCoordinates, new EmptySpace());
         playerCoordinates = newPosition;
         room.replace(playerCoordinates, player);
@@ -200,6 +217,8 @@ public class Room {
             dropArmorBlocks(rand.nextInt(2));
             for(int i = 0; i <= rand.nextInt(2); ++i)
                 addObject(new Orc(0));
+            for(int i = 0; i <= rand.nextInt(2); ++i)
+                addObject(new Spikes());
         }
         else
         {
@@ -209,6 +228,8 @@ public class Room {
                 addObject(new Orc(10));
             for(int i = 0; i <= rand.nextInt(1); ++i)
                 addObject(new Warlock());
+            for(int i = 0; i <= rand.nextInt(2); ++i)
+                addObject(new Spikes());
         }
     }
 
