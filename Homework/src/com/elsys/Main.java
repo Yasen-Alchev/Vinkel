@@ -41,6 +41,9 @@ public class Main {
 	}
 
 	void start(){
+		canvas.g.clearRect(0,0,450,450);
+		canvas.g.setColor(Color.black);
+		canvas.g.fillRect(0,0,450,450);
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {

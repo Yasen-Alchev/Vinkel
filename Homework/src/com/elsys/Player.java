@@ -1,6 +1,9 @@
 package com.elsys;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class Player implements GameObject {
     int health;
@@ -9,7 +12,7 @@ public class Player implements GameObject {
     int gold;
     Main game;
     Coordinates playerCoordinates;
-
+    Image img;
     Player(Main game)
     {
         this.game = game;
@@ -17,6 +20,12 @@ public class Player implements GameObject {
         this.ad = 10;
         this.armor = 6;
         this.gold = 0;
+        try {
+            this.img = ImageIO.read(new File("./resources/isaac.png"));
+            img = img.getScaledInstance(30, 30, Image.SCALE_FAST);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     void addGold(int gold){
@@ -79,12 +88,12 @@ public class Player implements GameObject {
     public void draw(Graphics2D g, Coordinates coordinates) {
         this.playerCoordinates = coordinates;
         g.clearRect(0, 460, 800 ,340); // we do this so the hp can update
-        g.setColor(Color.RED);
-        g.fillRect(coordinates.getX() * 30, coordinates.getY() * 30, 30 ,30);
+        g.drawImage(img,coordinates.getX()*30,coordinates.getY()*30,null,null);
         g.setColor(Color.BLACK);
         g.drawString(getCurrentHealth(), 0, 17 * 30);
         g.drawString(getCurrentArmor(), 0, 18 * 30);
         g.drawString(getCurrentDamage(), 0, 19 * 30);
         g.drawString(getCurrentGold(), 0, 20 * 30);
+
     }
 }

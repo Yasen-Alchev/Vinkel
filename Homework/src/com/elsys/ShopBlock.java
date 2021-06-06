@@ -1,6 +1,9 @@
 package com.elsys;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 public class ShopBlock implements GameObject, Usable{
@@ -8,7 +11,7 @@ public class ShopBlock implements GameObject, Usable{
     boolean[] shopItems = new boolean[itemsCount];
     int[] itemsPrices = new int[itemsCount];
     String itemNames[] = new String[itemsCount];
-
+    Image img;
     ShopBlock(){
         Arrays.fill(shopItems, false);
         shopItems[0] = true;
@@ -18,14 +21,20 @@ public class ShopBlock implements GameObject, Usable{
         itemsPrices[0] = 2;
         itemsPrices[1] = 5;
         itemsPrices[2] = 15;
+        try {
+            this.img = ImageIO.read(new File("./resources/shop.png"));
+            img = img.getScaledInstance(30, 30, Image.SCALE_FAST);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     public static Coordinates shopCoordinates = new Coordinates(7,7); //default coordinates
 
     @Override
     public void draw(Graphics2D g, Coordinates coordinates) {
         this.shopCoordinates = coordinates; //if the shop for some reason is moved somewhere else and update the default ones
-        g.setColor(Color.CYAN);
-        g.fillRect(coordinates.getX()*30,coordinates.getY()*30, 30, 30);
+        g.drawImage(img,coordinates.getX()*30,coordinates.getY()*30,null,null);
+
     }
 
     @Override

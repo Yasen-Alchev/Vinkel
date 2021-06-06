@@ -1,14 +1,27 @@
 package com.elsys;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class Orc extends Enemy{
 
     public final int goldDrop = 1;
 
+    Image img;
+
     Orc(int bonusAd)
     {
         super(15, 20 + bonusAd);
+
+        try {
+            this.img = ImageIO.read(new File("./resources/orc.png"));
+            img = img.getScaledInstance(30, 30, Image.SCALE_FAST);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -32,7 +45,6 @@ public class Orc extends Enemy{
 
     @Override
     public void draw(Graphics2D g, Coordinates coordinates) {
-        g.setColor(Color.green);
-        g.fillRect(coordinates.getX()*30, coordinates.getY()*30, 30, 30);
+        g.drawImage(img,coordinates.getX()*30,coordinates.getY()*30,null,null);
     }
 }

@@ -11,7 +11,7 @@ public class KeyPress implements KeyListener {
     {
         this.inShopMenu = false;
         this.room = room;
-        room.generateRoom();
+        room.startingRoom();
     }
     @Override
     public void keyTyped(KeyEvent e) {

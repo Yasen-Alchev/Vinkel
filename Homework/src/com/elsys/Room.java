@@ -74,6 +74,20 @@ public class Room {
         }
     }
 
+    void startingRoom(){
+        for(int i = 0; i < 15; i++){
+            for(int j = 0; j < 15; j++)
+            {
+                EmptySpace emptySpace = new EmptySpace();
+                room.put(this.getCoordinate(i, j), emptySpace);
+            }
+        }
+        playerCoordinates = getCoordinate(7,7);
+        room.replace(playerCoordinates, player);
+        room.replace(getCoordinate(14,7),new Door());
+
+    }
+
     void generateRoom()
     {
         for(int i = 0; i < 15; i++)
@@ -106,6 +120,7 @@ public class Room {
                 room.get(this.getCoordinate(i,j)).draw(g, this.getCoordinate(i, j));
             }
         }
+
         quest.draw(g);
     }
 
