@@ -9,17 +9,19 @@ public class Player implements GameObject {
     int health;
     int ad;
     int armor;
+    int maxHealth = 100;
     int gold;
     Main game;
     Coordinates playerCoordinates;
     Image img;
+
     Player(Main game)
     {
         this.game = game;
-        this.health = 100;
+        this.health = maxHealth;
         this.ad = 10;
         this.armor = 6;
-        this.gold = 0;
+        this.gold = 5;
         try {
             this.img = ImageIO.read(new File("./resources/isaac.png"));
             img = img.getScaledInstance(30, 30, Image.SCALE_FAST);
@@ -30,6 +32,19 @@ public class Player implements GameObject {
 
     void addGold(int gold){
         this.gold += gold;
+    }
+
+    void upgradeMaxHealth(int addMaxHealth){
+        this.maxHealth += addMaxHealth;
+    }
+
+    void getSpiked(){
+        this.health -= maxHealth*5/100;
+        if(this.health <= 0)
+        {
+            this.health = 0;
+            game.stop(false);
+        }
     }
 
     void takeDmg(int damage)
@@ -52,9 +67,9 @@ public class Player implements GameObject {
     void addHealth(int health)
     {
         this.health += health;
-        if(this.health > 100)
+        if(this.health > maxHealth)
         {
-            this.health = 100;
+            this.health = maxHealth;
         }
     }
 

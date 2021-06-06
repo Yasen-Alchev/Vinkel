@@ -18,4 +18,5 @@ public abstract class Quest {
     public abstract String toString();
 
     public abstract void draw(Graphics2D g);
+
 }

@@ -88,6 +88,12 @@ public class Main {
 		start();
 	}
 
+	void clearSquare(Coordinates coordinates){
+		canvas.g.clearRect(coordinates.getX()*30, coordinates.getY()*30, 30, 30);
+		canvas.g.setColor(Color.BLACK);
+		canvas.g.fillRect(coordinates.getX()*30, coordinates.getY()*30, 30, 30);
+	}
+
     public static void main(String[] args) {
 		new Main();
     }

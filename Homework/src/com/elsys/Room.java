@@ -1,6 +1,7 @@
 package com.elsys;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.TreeMap;
 
@@ -23,12 +24,14 @@ public class Room {
         this.shopBlock = null;
         this.player = new Player(game);
         this.room = new TreeMap<>();
-        this.quest = new WarlockQuest();
         this.game = game;
         this.totalEnemies = 0;
         this.totalRooms = 0;
         this.allCoordinates = new Coordinates[15][15];
         this.isOnSpikes = false;
+
+        this.setQuest();
+
         for(int i = 0; i < 15; i++)
         {
             for(int j = 0; j < 15; j++)
@@ -36,6 +39,15 @@ public class Room {
                 allCoordinates[i][j] = new Coordinates(i, j);
             }
         }
+    }
+
+    void setQuest()
+    {
+        ArrayList<Quest> allQuests = new ArrayList<>();
+        allQuests.add(new OrcQuest());
+        allQuests.add(new WarlockQuest());
+
+        this.quest = allQuests.get(rand.nextInt(2));
     }
 
     Coordinates getCoordinate(int x, int y)
@@ -201,6 +213,7 @@ public class Room {
             return;
         }
         if(room.get(newPosition) instanceof Item){
+            game.clearSquare(newPosition);
             ((Item) room.get(newPosition)).picked();
         }
 
@@ -208,13 +221,14 @@ public class Room {
             room.replace(playerCoordinates, new Spikes());
             isOnSpikes = false;
         }else{
-
             room.replace(playerCoordinates, new EmptySpace());
         }
+
         if(room.get(newPosition) instanceof Spikes){
             ((Spikes) room.get(newPosition)).dealDmg(player);
             isOnSpikes = true;
         }
+
         playerCoordinates = newPosition;
         room.replace(playerCoordinates, player);
 
@@ -222,29 +236,38 @@ public class Room {
         playerCoordinates = newPosition;
         room.replace(playerCoordinates, player);
     }
+
     void normalRoom(int totalRooms){
         isShop = false;
         for(int i = 0; i <= rand.nextInt(5); ++i)
             addObject(new Rock());
+        for(int i = 0; i <= rand.nextInt(1); ++i)
+            addObject(new Spikes());
+
         if(totalRooms <= 10)
         {
             dropHealthBlocks(rand.nextInt(4));
             dropArmorBlocks(rand.nextInt(2));
             for(int i = 0; i <= rand.nextInt(2); ++i)
                 addObject(new Orc(0));
-            for(int i = 0; i <= rand.nextInt(2); ++i)
-                addObject(new Spikes());
         }
-        else
+        else if(totalRooms <= 15)
         {
             dropHealthBlocks(rand.nextInt(3));
             dropArmorBlocks(rand.nextInt(3));
             for(int i = 0; i <= rand.nextInt(3); ++i)
                 addObject(new Orc(10));
             for(int i = 0; i <= rand.nextInt(1); ++i)
-                addObject(new Warlock());
-            for(int i = 0; i <= rand.nextInt(2); ++i)
-                addObject(new Spikes());
+                addObject(new Warlock(0));
+        }
+        else
+        {
+            dropHealthBlocks(rand.nextInt(3));
+            dropArmorBlocks(rand.nextInt(3));
+            for(int i = 0; i <= rand.nextInt(3); ++i)
+                addObject(new Orc(20));
+            for(int i = 0; i <= rand.nextInt(1); ++i)
+                addObject(new Warlock(10));
         }
     }
 

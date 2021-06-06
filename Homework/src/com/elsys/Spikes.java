@@ -17,7 +17,7 @@ public class Spikes implements GameObject, Passable{
     }
 
     void dealDmg(Player player){
-        player.takeDmg(10);
+        player.getSpiked();
     }
 
     @Override

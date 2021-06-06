@@ -10,9 +10,9 @@ public class Warlock extends Enemy{
     public final int goldDrop = 2;
     Image img;
 
-    Warlock()
+    Warlock(int bonusAd)
     {
-        super(20, 40);
+        super(20, 35 + bonusAd);
         try {
             this.img = ImageIO.read(new File("./resources/warlock.png"));
             img = img.getScaledInstance(30, 30, Image.SCALE_FAST);

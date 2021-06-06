@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 public class ShopBlock implements GameObject, Usable{
-    public final static int itemsCount = 3;
+    public final static int itemsCount = 4;
     boolean[] shopItems = new boolean[itemsCount];
     int[] itemsPrices = new int[itemsCount];
     String itemNames[] = new String[itemsCount];
@@ -15,12 +15,16 @@ public class ShopBlock implements GameObject, Usable{
     ShopBlock(){
         Arrays.fill(shopItems, false);
         shopItems[0] = true;
+
         itemNames[0] = "Health: 2 coins";
         itemNames[1] = "Armor: 5 coins";
-        itemNames[2] = "Wings(Flight Item): 15 coins";
+        itemNames[2] = "AttackDmg: 10 coins";
+        itemNames[3] = "UpgradeMaxHealth: 7 coins";
+
         itemsPrices[0] = 2;
         itemsPrices[1] = 5;
-        itemsPrices[2] = 15;
+        itemsPrices[2] = 10;
+        itemsPrices[3] = 7;
         try {
             this.img = ImageIO.read(new File("./resources/shop.png"));
             img = img.getScaledInstance(30, 30, Image.SCALE_FAST);
@@ -51,7 +55,6 @@ public class ShopBlock implements GameObject, Usable{
                     return true;
                 }
             }
-            System.out.println();
         }
         return false;
     }
@@ -113,6 +116,11 @@ public class ShopBlock implements GameObject, Usable{
                             player.gold -= itemsPrices[i];
                             break;
                         case 2:
+                            new AttackDmgUp(player).picked();
+                            player.gold -= itemsPrices[i];
+                            break;
+                        case 3:
+                            new UpgradeMaxHealth(player).picked();
                             player.gold -= itemsPrices[i];
                             break;
                     }
@@ -120,4 +128,5 @@ public class ShopBlock implements GameObject, Usable{
             }
         }
     }
+
 }
