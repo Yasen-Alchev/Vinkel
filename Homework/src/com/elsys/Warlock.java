@@ -12,7 +12,7 @@ public class Warlock extends Enemy{
 
     Warlock(int bonusAd)
     {
-        super(20, 35 + bonusAd);
+        super(20, 30 + bonusAd);
         try {
             this.img = ImageIO.read(new File("./resources/warlock.png"));
             img = img.getScaledInstance(30, 30, Image.SCALE_FAST);

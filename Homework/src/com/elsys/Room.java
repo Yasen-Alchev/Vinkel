@@ -77,13 +77,15 @@ public class Room {
     }
 
     void addObject(GameObject object){
-        int randX = rand.nextInt(14);
-        int randY = rand.nextInt(14);
-        if (room.get(getCoordinate(randX, randY)) instanceof EmptySpace) {
-            room.replace(getCoordinate(randX, randY), object);
-            if(object instanceof Enemy)
-                totalEnemies++;
+        int randX = rand.nextInt(15);
+        int randY = rand.nextInt(15);
+        while (!(room.get(new Coordinates(randX, randY)) instanceof EmptySpace)){
+            randX = rand.nextInt(15);
+            randY = rand.nextInt(15);
         }
+        room.replace(getCoordinate(randX, randY), object);
+        if(object instanceof Enemy)
+            totalEnemies++;
     }
 
     void startingRoom(){
@@ -119,7 +121,6 @@ public class Room {
         else{
             normalRoom(totalRooms);
         }
-
         totalRooms++;
     }
 
@@ -132,7 +133,6 @@ public class Room {
                 room.get(this.getCoordinate(i,j)).draw(g, this.getCoordinate(i, j));
             }
         }
-
         quest.draw(g);
     }
 
@@ -253,21 +253,21 @@ public class Room {
         }
         else if(totalRooms <= 15)
         {
-            dropHealthBlocks(rand.nextInt(3));
+            dropHealthBlocks(rand.nextInt(4));
             dropArmorBlocks(rand.nextInt(3));
             for(int i = 0; i <= rand.nextInt(3); ++i)
-                addObject(new Orc(10));
+                addObject(new Orc(5));
             for(int i = 0; i <= rand.nextInt(1); ++i)
                 addObject(new Warlock(0));
         }
         else
         {
-            dropHealthBlocks(rand.nextInt(3));
+            dropHealthBlocks(rand.nextInt(4));
             dropArmorBlocks(rand.nextInt(3));
             for(int i = 0; i <= rand.nextInt(3); ++i)
-                addObject(new Orc(20));
+                addObject(new Orc(10));
             for(int i = 0; i <= rand.nextInt(1); ++i)
-                addObject(new Warlock(10));
+                addObject(new Warlock(5));
         }
     }
 
