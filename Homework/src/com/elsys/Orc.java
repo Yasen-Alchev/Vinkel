@@ -6,9 +6,9 @@ public class Orc extends Enemy{
 
     public final int goldDrop = 1;
 
-    Orc()
+    Orc(int bonusAd)
     {
-        super(15, 20);
+        super(15, 20 + bonusAd);
     }
 
     @Override

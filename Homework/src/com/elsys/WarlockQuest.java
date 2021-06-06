@@ -5,7 +5,7 @@ import java.awt.*;
 public class WarlockQuest extends Quest {
 
     WarlockQuest() {
-        super(5);
+        super(10);
     }
 
     @Override

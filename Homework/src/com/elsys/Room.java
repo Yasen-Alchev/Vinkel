@@ -13,6 +13,7 @@ public class Room {
     Player player;
     Quest quest;
     int totalEnemies;
+    int totalRooms;
     Random rand = new Random();
     ShopBlock shopBlock;
 
@@ -21,9 +22,10 @@ public class Room {
         this.shopBlock = null;
         this.player = new Player(game);
         this.room = new TreeMap<>();
-        this.quest = new WarlockQuest();
+        this.quest = new OrcQuest();
         this.game = game;
         this.totalEnemies = 0;
+        this.totalRooms = 0;
         this.allCoordinates = new Coordinates[15][15];
         for(int i = 0; i < 15; i++)
         {
@@ -81,14 +83,16 @@ public class Room {
             }
         }
 
+        playerCoordinates = getCoordinate(0,7);
+        room.replace(playerCoordinates, player);
         if(rand.nextInt(10) == 9){
             shopRoom();
         }
         else{
-            normalRoom();
+            normalRoom(totalRooms);
         }
-        playerCoordinates = getCoordinate(0,7);
-        room.replace(playerCoordinates, player);
+
+        totalRooms++;
     }
 
     void renderRoom(Graphics2D g)
@@ -186,16 +190,26 @@ public class Room {
         playerCoordinates = newPosition;
         room.replace(playerCoordinates, player);
     }
-    void normalRoom(){
+    void normalRoom(int totalRooms){
         isShop = false;
-        dropHealthBlocks(rand.nextInt(2) + 1);
-        dropArmorBlocks(rand.nextInt(2) + 1);
         for(int i = 0; i <= rand.nextInt(5); ++i)
             addObject(new Rock());
-        for(int i = 0; i <= rand.nextInt(2); ++i)
-            addObject(new Orc());
-        for(int i = 0; i <= rand.nextInt(1); ++i)
-            addObject(new Warlock());
+        if(totalRooms <= 10)
+        {
+            dropHealthBlocks(rand.nextInt(4));
+            dropArmorBlocks(rand.nextInt(2));
+            for(int i = 0; i <= rand.nextInt(2); ++i)
+                addObject(new Orc(0));
+        }
+        else
+        {
+            dropHealthBlocks(rand.nextInt(3));
+            dropArmorBlocks(rand.nextInt(3));
+            for(int i = 0; i <= rand.nextInt(3); ++i)
+                addObject(new Orc(10));
+            for(int i = 0; i <= rand.nextInt(1); ++i)
+                addObject(new Warlock());
+        }
     }
 
     void shopRoom(){

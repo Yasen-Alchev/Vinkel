@@ -17,6 +17,6 @@ public class ArmorUp implements GameObject, Item, Passable{
 
     @Override
     public void picked() {
-        player.addArmor(5);
+        player.addArmor(2);
     }
 }

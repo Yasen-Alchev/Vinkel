@@ -81,6 +81,7 @@ public class Main {
 	void exitShop(){
 		this.timer = new Timer();
 		canvas.g.clearRect(0, 0, BoardX, BoardY);
+		canvas.g.setFont(myFont);
 		start();
 	}
 

@@ -15,7 +15,7 @@ public class Player implements GameObject {
         this.game = game;
         this.health = 100;
         this.ad = 10;
-        this.armor = 0;
+        this.armor = 6;
         this.gold = 0;
     }
 

@@ -8,7 +8,7 @@ public class Warlock extends Enemy{
 
     Warlock()
     {
-        super(20, 25);
+        super(20, 30);
     }
 
     @Override
