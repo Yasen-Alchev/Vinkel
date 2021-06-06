@@ -22,7 +22,7 @@ public class Room {
         this.shopBlock = null;
         this.player = new Player(game);
         this.room = new TreeMap<>();
-        this.quest = new OrcQuest();
+        this.quest = new WarlockQuest();
         this.game = game;
         this.totalEnemies = 0;
         this.totalRooms = 0;

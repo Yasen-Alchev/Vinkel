@@ -12,12 +12,12 @@ public class ShopBlock implements GameObject, Usable{
     ShopBlock(){
         Arrays.fill(shopItems, false);
         shopItems[0] = true;
-        itemNames[0] = "Health: 1 coins";
-        itemNames[1] = "Armor: 2 coins";
-        itemNames[2] = "Wings(Flight Item): 5 coins";
-        itemsPrices[0] = 1;
-        itemsPrices[1] = 2;
-        itemsPrices[2] = 5;
+        itemNames[0] = "Health: 2 coins";
+        itemNames[1] = "Armor: 5 coins";
+        itemNames[2] = "Wings(Flight Item): 15 coins";
+        itemsPrices[0] = 2;
+        itemsPrices[1] = 5;
+        itemsPrices[2] = 15;
     }
     public static Coordinates shopCoordinates = new Coordinates(7,7); //default coordinates
 
